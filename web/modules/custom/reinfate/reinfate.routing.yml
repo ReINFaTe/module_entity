@@ -1,0 +1,7 @@
+reinfate.guestbook:
+  path: '/guestbook'
+  defaults:
+    _title: 'Guest Book'
+    _controller: '\Drupal\reinfate\Controller\GuestBookController::content'
+  requirements:
+    _permission: 'access content'

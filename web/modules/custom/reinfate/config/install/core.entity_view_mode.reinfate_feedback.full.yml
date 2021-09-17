@@ -1,0 +1,9 @@
+langcode: en
+status: false
+dependencies:
+  module:
+    - reinfate
+id: reinfate_feedback.full
+label: 'Full content'
+targetEntityType: reinfate_feedback
+cache: true

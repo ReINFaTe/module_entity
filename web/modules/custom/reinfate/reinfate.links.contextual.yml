@@ -1,0 +1,4 @@
+feedback_edit:
+  title: 'Edit'
+  route_name: 'entity.reinfate_feedback.edit_form'
+  group: 'reinfate_feedback'
