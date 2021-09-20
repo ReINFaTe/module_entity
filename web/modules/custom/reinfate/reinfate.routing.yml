@@ -5,3 +5,4 @@ reinfate.guestbook:
     _controller: '\Drupal\reinfate\Controller\GuestBookController::content'
   requirements:
     _permission: 'access content'
+

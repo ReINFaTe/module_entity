@@ -1,4 +1,20 @@
 <div{{ attributes }}>
   {{ title_suffix }}
-  {{ content }}
+  <div class="feedback-authored">
+    {{ content.avatar }}
+    {{ content.name }}
+    {{ content.created }}
+  </div>
+  <div class="feedback-content">
+    {{ content.feedback }}
+    {% if content.image[0] is not empty %}
+      <div class="feedback-attachments">
+        {{ content.image }}
+      </div>
+    {% endif%}
+  </div>
+  <div class="feedback-contacts">
+    {{ content.email }}
+    {{ content.telephone }}
+  </div>
 </div>

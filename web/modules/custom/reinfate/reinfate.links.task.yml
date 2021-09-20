@@ -1,0 +1,14 @@
+feedback.view:
+  route_name: entity.reinfate_feedback.canonical
+  base_route: entity.reinfate_feedback.canonical
+  title: View
+
+feedback.edit:
+  route_name: entity.reinfate_feedback.edit_form
+  base_route: entity.reinfate_feedback.canonical
+  title: Edit
+
+feedback.delete:
+  route_name:  entity.reinfate_feedback.delete_form
+  base_route:  entity.reinfate_feedback.canonical
+  title: Delete

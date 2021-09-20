@@ -23,6 +23,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *    "form" = {
  *      "default" = "Drupal\reinfate\Form\FeedbackDefaultForm",
  *      "edit" = "Drupal\reinfate\Form\FeedbackDefaultForm",
+ *      "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm"
  *    },
  *    "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
@@ -49,7 +50,7 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['name'] = BaseFieldDefinition::create('string')
-      ->setLabel('Name')
+      ->setLabel(t('Name'))
       ->setDefaultValue(NULL)
       ->setRequired(TRUE)
       ->addPropertyConstraints('value', [
@@ -60,6 +61,7 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
           'minMessage' => 'Name is too short. It should have %limit character or more.|Name is too short. It should have %limit characters or more.',
         ],
       ])
+      ->setSetting('max_length', 100)
       ->setDisplayOptions('form', [
         'type' => 'string',
       ])
@@ -68,7 +70,7 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
       ]);
 
     $fields['email'] = BaseFieldDefinition::create('email')
-      ->setLabel('Email')
+      ->setLabel(t('Email'))
       ->setDefaultValue(NULL)
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
@@ -78,10 +80,19 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
         'type' => 'email_mailto',
       ]);
 
-    $fields['telephone'] = BaseFieldDefinition::create('telephone')
-      ->setLabel('Mobile number')
+    $fields['telephone'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Mobile number'))
       ->setDefaultValue(NULL)
       ->setRequired(TRUE)
+      ->addPropertyConstraints(
+        'value', [
+          'Regex' => [
+            'pattern' => '/^\+[0-9]{11,13}$/',
+            'message' => t('Mobile number format is +38(050)-826-3469'),
+          ],
+        ]
+      )
+      ->setSetting('max_length', 13)
       ->setDisplayOptions('form', [
         'type' => 'telephone_default',
       ])
@@ -90,24 +101,25 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
       ]);
 
     $fields['feedback'] = BaseFieldDefinition::create('string_long')
-      ->setLabel('Feedback')
+      ->setLabel(t('Feedback'))
       ->setDefaultValue(NULL)
       ->setRequired(TRUE)
       ->addPropertyConstraints('value', [
         'Length' => [
           'max' => 1000,
-          'maxMessage' => 'Feedback is too long. It should have %limit character or less.|Name is too long. It should have %limit characters or less.',
+          'maxMessage' => 'Feedback is too long. It should have %limit character or less.|Feedback is too long. It should have %limit characters or less.',
         ],
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'text_default',
       ])
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
-      ])
-      ->setDisplayOptions('view', [
-        'type' => 'string',
       ]);
 
     $fields['avatar'] = BaseFieldDefinition::create('image')
-      ->setLabel('Avatar')
+      ->setLabel(t('Avatar'))
       ->setDefaultValue(NULL)
       ->setSettings([
         'file_extensions' => 'png jpg jpeg',
@@ -117,14 +129,21 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
       ])
       ->setDisplayOptions('view', [
         'type' => 'image',
+        'label' => 'hidden',
+        'settings' => [
+          // Not sure can I rely on default image_style or should
+          // create my own.
+          'image_style' => 'thumbnail',
+          'image_link' => 'file',
+        ],
       ])
       ->setDisplayOptions('form', [
         'type' => 'image',
       ]);
 
     $fields['image'] = BaseFieldDefinition::create('image')
-      ->setLabel('Picture')
-      ->setDescription('You can add a picture to your feedback')
+      ->setLabel(t('image'))
+      ->setDescription(t('You can add an image to your feedback'))
       ->setDefaultValue(NULL)
       ->setSettings([
         'file_extensions' => 'png jpg jpeg',
@@ -134,6 +153,11 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
       ])
       ->setDisplayOptions('view', [
         'type' => 'image',
+        'label' => 'hidden',
+        'settings' => [
+          'image_style' => 'medium',
+          'image_link' => 'file',
+        ],
       ])
       ->setDisplayOptions('form', [
         'type' => 'image',
@@ -141,7 +165,14 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
+      ->setDescription(t('The time that the entity was created.'))
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'datetime_custom',
+        'settings' => [
+          'data_format' => 'm/j/Y H:i:s',
+        ],
+      ]);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))

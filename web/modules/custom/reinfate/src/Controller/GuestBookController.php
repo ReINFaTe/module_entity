@@ -2,6 +2,8 @@
 
 namespace Drupal\reinfate\Controller;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityFormBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -41,20 +43,44 @@ class GuestBookController extends ControllerBase {
     $storage = $this->entityTypeManager->getStorage('reinfate_feedback');
     $form = $this->entityFormBuilder->getForm($storage->create());
 
-    $entity = $storage->getQuery()
+    // Get feedbacks.
+    $feedbacks = $this->getFeedbacksRender();
+    return [
+      '#theme' => 'reinfate-page',
+      '#form' => $form,
+      '#feedbacks_list' => $feedbacks,
+    ];
+  }
+
+  /**
+   * Ajax response for feedbacks list.
+   */
+  public function ajaxGetFeedbacks() {
+    $response = new AjaxResponse();
+    // Get feedbacks.
+    $renders = $this->getFeedbacksRender();
+
+    $response->addCommand(new ReplaceCommand('.reinfate-feedbacks-list', $renders));
+    return $response;
+  }
+
+  /**
+   * Get feedbacks.
+   */
+  public function getFeedbacksRender() {
+    $storage = $this->entityTypeManager->getStorage('reinfate_feedback');
+    $query = $storage->getQuery()
       ->sort('created', 'DESC')
       ->pager(5);
-    $coments_ids = $entity->execute();
-    $feedbacks = $storage->loadMultiple($coments_ids);
+    $feedbacks = $query->execute();
+    $feedbacks = $storage->loadMultiple($feedbacks);
     $view_builder = $this->entityTypeManager->getViewBuilder('reinfate_feedback');
-    $renders = [];
     $renders = $view_builder->viewMultiple($feedbacks);
     $pager = [
       '#type' => 'pager',
     ];
     return [
-      '#theme' => 'reinfate-page',
-      '#form' => $form,
+      '#theme' => 'reinfate_feedbacks_list',
       '#feedbacks' => $renders,
       '#pager' => $pager,
     ];

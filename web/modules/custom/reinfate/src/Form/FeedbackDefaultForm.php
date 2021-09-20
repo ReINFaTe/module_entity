@@ -3,8 +3,11 @@
 namespace Drupal\reinfate\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use http\Url;
 
 /**
  * Default form for feedback entity type.
@@ -29,7 +32,12 @@ class FeedbackDefaultForm extends ContentEntityForm {
    * Ajax submit.
    */
   public function submitAjax(array &$form, FormStateInterface $form_state) {
-    return $form;
+    if ($form_state->hasAnyErrors()) {
+      return $form;
+    }
+    $response = new AjaxResponse();
+    $response->addCommand(new RedirectCommand('/guestbook'));
+    return $response;
   }
 
 }

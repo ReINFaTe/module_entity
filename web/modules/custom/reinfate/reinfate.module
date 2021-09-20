@@ -16,8 +16,7 @@ function reinfate_theme($existing, $type, $theme, $path) : array {
     'reinfate-page' => [
       'variables' => [
         'form' => NULL,
-        'feedbacks' => NULL,
-        'pager' => NULL,
+        'feedbacks_list' => NULL,
       ],
     ],
     'reinfate_feedback' => [
@@ -25,6 +24,13 @@ function reinfate_theme($existing, $type, $theme, $path) : array {
       'render element' => 'elements',
       'title_suffix' => '',
       'content_attributes' => NULL,
+    ],
+    'reinfate_feedbacks_list' => [
+      'template' => 'reinfate-feedbacks-list',
+      'variables' => [
+        'feedbacks' => NULL,
+        'pager' => NULL,
+      ],
     ],
   ];
 }
@@ -44,5 +50,15 @@ function template_preprocess_reinfate_feedback(&$variables) {
   $variables['url'] = $entity->toUrl()->toString();
   $variables['#attached']['library'][] = 'reinfate/feedback-style';
   $variables['attributes']['class'][] = Html::cleanCssIdentifier($entity->bundle());
-
+  // Default avatar if not uploaded.
+  if (!isset($variables['content']['avatar']['#theme'])) {
+    $variables['content']['avatar'] = [
+      '#theme' => 'image',
+      '#style' => 'thumbnail',
+      '#uri' => '/modules/custom/reinfate/assets/default-avatar.png',
+      '#attributes' => [
+        'alt' => 'avatar',
+      ],
+    ];
+  }
 }
