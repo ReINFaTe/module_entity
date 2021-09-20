@@ -3,11 +3,9 @@
 namespace Drupal\reinfate\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use http\Url;
 
 /**
  * Default form for feedback entity type.

@@ -50,7 +50,7 @@ function template_preprocess_reinfate_feedback(&$variables) {
   $variables['url'] = $entity->toUrl()->toString();
   $variables['#attached']['library'][] = 'reinfate/feedback-style';
   $variables['attributes']['class'][] = Html::cleanCssIdentifier($entity->bundle());
-  // Default avatar if not uploaded.
+  // Display default avatar if not uploaded.
   if (!isset($variables['content']['avatar']['#theme'])) {
     $variables['content']['avatar'] = [
       '#theme' => 'image',

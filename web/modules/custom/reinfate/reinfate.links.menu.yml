@@ -1,0 +1,6 @@
+entity.reinfate_feedback.collection:
+  title: 'Feedbacks list'
+  route_name: entity.reinfate_feedback.collection
+  description: 'List feedback entities'
+  parent: system.admin_structure
+  weight: 100

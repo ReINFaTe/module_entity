@@ -18,6 +18,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   base_table = "reinfate_feedback",
  *   admin_permission = "administer reinfate_feedback",
  *   handlers = {
+ *    "list_builder" = "Drupal\reinfate\ReinfateListBuilder",
  *    "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *    "access" = "Drupal\Core\Entity\EntityAccessControlHandler",
  *    "form" = {
@@ -37,6 +38,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *     "canonical" = "/reinfate/{reinfate_feedback}",
  *     "edit-form" = "/reinfate/{reinfate_feedback}/edit",
  *     "delete-form" = "/reinfate/{reinfate_feedback}/delete",
+ *     "collection" = "/admin/structure/reinfate",
  *   },
  *   field_ui_base_route = "entity.reinfate_feedback.edit_form",
  * )
@@ -57,6 +59,8 @@ class Feedback extends ContentEntityBase implements ContentEntityInterface, Enti
         'Length' => [
           'min' => 2,
           'max' => 100,
+          // Set messages here, because not sure is it good idea to
+          // copy validation code just to pass a field name to it.
           'maxMessage' => 'Name is too long. It should have %limit character or less.|Name is too long. It should have %limit characters or less.',
           'minMessage' => 'Name is too short. It should have %limit character or more.|Name is too short. It should have %limit characters or more.',
         ],
